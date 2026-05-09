@@ -19,10 +19,10 @@ mc = 10.0  # cart mass
 L = 1.0  # pendulum length
 g = 9.81  # gravitational acceleration
 dt = 0.1  # discretization time step
-animate = False  # whether or not to animate results
+animate = True  # whether or not to animate results
+
 FIG_DIR = Path(__file__).resolve().parents[1] / "latex" / "figures"
 FIG_DIR.mkdir(parents=True, exist_ok=True)
-
 
 def cartpole(s: np.ndarray, u: np.ndarray) -> np.ndarray:
     """Compute the cart-pole state derivative
@@ -63,8 +63,8 @@ def reference(t: float) -> np.ndarray:
 
     # PART (d) ##################################################
     # INSTRUCTIONS: Compute the reference state for a given time
-    ω = 2 * np.pi / T
-    return np.array([a * np.sin(ω * t), np.pi, a * ω * np.cos(ω * t), 0.0])
+    omega = 2 * np.pi / T
+    return np.array([a * np.sin(omega * t), np.pi, a * omega * np.cos(omega * t), 0.0])
     # END PART (d) ##############################################
 
 
@@ -148,17 +148,18 @@ def compute_lti_matrices() -> tuple[np.ndarray, np.ndarray]:
     """
     # PART (a) ##################################################
     # INSTRUCTIONS: Construct the A and B matrices
+    a = mp * g / mc
+    b = (mc + mp) * g / (mc * L)
     F = np.array(
         [
             [0.0, 0.0, 1.0, 0.0],
             [0.0, 0.0, 0.0, 1.0],
-            [0.0, mp * g / mc, 0.0, 0.0],
-            [0.0, (mc + mp) * g / (mc * L), 0.0, 0.0],
+            [0.0, a,   0.0, 0.0],
+            [0.0, b,   0.0, 0.0],
         ]
     )
-    G = np.array([[0.0], [0.0], [1.0 / mc], [1.0 / (mc * L)]])
     A = np.eye(n) + dt * F
-    B = dt * G
+    B = dt * np.array([[0.0], [0.0], [1.0 / mc], [1.0 / (mc * L)]])
     # END PART (a) ##############################################
     return A, B
 
@@ -189,12 +190,12 @@ def plot_state_and_control_history(
         axes[n + i].set_xlabel(r"$t$")
         axes[n + i].set_ylabel(labels_u[i])
     plt.savefig(FIG_DIR / f"{name}.png", bbox_inches="tight")
-    plt.show()
+    # plt.show()
 
     if animate:
         fig, ani = animate_cartpole(t, s[:, 0], s[:, 1])
         ani.save(FIG_DIR / f"{name}.mp4", writer="ffmpeg")
-        plt.show()
+        # plt.show()
 
 
 def main():
