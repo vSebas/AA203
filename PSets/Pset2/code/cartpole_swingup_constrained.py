@@ -5,6 +5,7 @@ Autonomous Systems Lab (ASL), Stanford University
 """
 
 from functools import partial
+from pathlib import Path
 
 from animations import animate_cartpole
 
@@ -18,6 +19,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from tqdm import tqdm
+
+
+FIG_DIR = Path(__file__).resolve().parents[1] / "latex" / "figures"
+FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @partial(jax.jit, static_argnums=(0,))
@@ -47,7 +52,8 @@ def affinize(f, s, u):
     """
     # PART (b) ################################################################
     # INSTRUCTIONS: Use JAX to affinize `f` around `(s, u)` in two lines.
-    raise NotImplementedError()
+    A, B = jax.jacobian(f, argnums=(0, 1))(s, u)
+    c = f(s, u) - A @ s - B @ u
     # END PART (b) ############################################################
     return A, B, c
 
@@ -170,9 +176,18 @@ def scp_iteration(f, s0, s_goal, s_prev, u_prev, N, P, Q, R, u_max, ρ):
 
     # PART (c) ################################################################
     # INSTRUCTIONS: Construct the convex SCP sub-problem.
-    objective = 0.0
-    constraints = []
-    raise NotImplementedError()
+    objective = cvx.quad_form(s_cvx[N] - s_goal, P)
+    constraints = [s_cvx[0] == s0]
+    for k in range(N):
+        objective += cvx.quad_form(s_cvx[k] - s_goal, Q)
+        objective += cvx.quad_form(u_cvx[k], R)
+        constraints += [
+            s_cvx[k + 1] == A[k] @ s_cvx[k] + B[k] @ u_cvx[k] + c[k],
+            cvx.abs(u_cvx[k, 0]) <= u_max,
+            cvx.norm_inf(s_cvx[k] - s_prev[k]) <= ρ,
+            cvx.norm_inf(u_cvx[k] - u_prev[k]) <= ρ,
+        ]
+    constraints.append(cvx.norm_inf(s_cvx[N] - s_prev[N]) <= ρ)
     # END PART (c) ############################################################
 
     prob = cvx.Problem(cvx.Minimize(objective), constraints)
@@ -234,7 +249,7 @@ R = 1e-3 * np.eye(m)  # control cost matrix
 u_max = 8.0  # control effort bound
 eps = 5e-1  # convergence tolerance
 max_iters = 100  # maximum number of SCP iterations
-animate = False  # flag for animation
+animate = True  # flag for animation
 
 # Initialize the discrete-time dynamics
 fd = jax.jit(discretize(cartpole, dt))
@@ -264,18 +279,18 @@ for i in range(m):
     ax[n + i].axhline(-u_max, linestyle="--", color="tab:orange")
     ax[n + i].set_xlabel(r"$t$")
     ax[n + i].set_ylabel(labels_u[i])
-plt.savefig("cartpole_swingup_constrained.png", bbox_inches="tight")
+plt.savefig(FIG_DIR / "cartpole_swingup_constrained.png", bbox_inches="tight")
 
 # Plot cost history over SCP iterations
 fig, ax = plt.subplots(1, 1, dpi=150, figsize=(8, 5))
 ax.semilogy(J)
 ax.set_xlabel(r"SCP iteration $i$")
 ax.set_ylabel(r"SCP cost $J(\bar{x}^{(i)}, \bar{u}^{(i)})$")
-plt.savefig("cartpole_swingup_constrained_cost.png", bbox_inches="tight")
-plt.show()
+plt.savefig(FIG_DIR / "cartpole_swingup_constrained_cost.png", bbox_inches="tight")
+# plt.show()
 
 # Animate the solution
 if animate:
     fig, ani = animate_cartpole(t, s[:, 0], s[:, 1])
-    ani.save("cartpole_swingup_constrained.mp4", writer="ffmpeg")
-    plt.show()
+    ani.save(FIG_DIR / "cartpole_swingup_constrained.mp4", writer="ffmpeg")
+    # plt.show()

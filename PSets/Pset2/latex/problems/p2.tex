@@ -1,0 +1,49 @@
+
+\section*{2.2 Shortest Path Through a Grid}
+
+\subsection*{2.2(a)}
+Using dynamic programming from right to left gives the value function
+\[
+\begin{array}{c|c}
+\text{node} & V(\text{node})\\
+\hline
+B&0\\
+u_5&10\\
+d_5&11\\
+u_4&18\\
+m_4&16\\
+d_4&20\\
+u_3&25\\
+um_3&23\\
+dm_3&21\\
+d_3&27\\
+u_2&29\\
+m_2&29\\
+d_2&31\\
+u_1&35\\
+d_1&36\\
+A&40
+\end{array}
+\]
+Thus the shortest path has cost
+\[
+    \boxed{40}.
+\]
+One optimal path is
+\[
+    A\to u_1\to u_2\to um_3\to u_4\to u_5\to B.
+\]
+
+\subsection*{2.2(b)}
+For an \(n\)-segment grid, each route consists of \(n\) up moves and \(n\) down
+moves, so exhaustive search evaluates
+\[
+    \boxed{\binom{2n}{n}}
+\]
+routes. Dynamic programming evaluates each nonterminal node. The number of
+such DP evaluations is
+\[
+    \boxed{n(n+2)}.
+\]
+For \(n=3\), these give \(\binom{6}{3}=20\) and \(3(5)=15\), matching the
+problem statement.

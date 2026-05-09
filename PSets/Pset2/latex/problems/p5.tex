@@ -1,0 +1,26 @@
+\section*{2.5 Machine Maintenance}
+
+Let \(V_R(h)\) and \(V_B(h)\) denote the optimal expected profit with \(h\)
+weeks remaining when the machine starts the week running or broken.
+\[
+\begin{aligned}
+V_R(h)&=\max\{40+0.6V_R(h-1)+0.4V_B(h-1),\\
+&\qquad\qquad 30+0.3V_R(h-1)+0.7V_B(h-1)\},\\
+V_B(h)&=\max\{20+0.6V_R(h-1)+0.4V_B(h-1),\ -50+V_R(h-1)\}.
+\end{aligned}
+\]
+With \(V_R(0)=V_B(0)=0\), the computed values are
+\[
+\begin{array}{c|cccc}
+h&0&1&2&3\\
+\hline
+V_R(h)&0&40&72&104\\
+V_B(h)&0&20&52&84
+\end{array}
+\]
+The optimal policy is to perform preventive maintenance when running and to
+repair when broken. Since the machine is new at week 1 and guaranteed to run
+through that week, the total expected profit over four weeks is
+\[
+    \boxed{100+V_R(3)=204}.
+\]

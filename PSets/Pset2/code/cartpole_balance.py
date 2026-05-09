@@ -7,6 +7,7 @@ Autonomous Systems Lab (ASL), Stanford University
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 from animations import animate_cartpole
 
@@ -19,6 +20,8 @@ L = 1.0  # pendulum length
 g = 9.81  # gravitational acceleration
 dt = 0.1  # discretization time step
 animate = False  # whether or not to animate results
+FIG_DIR = Path(__file__).resolve().parents[1] / "latex" / "figures"
+FIG_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def cartpole(s: np.ndarray, u: np.ndarray) -> np.ndarray:
@@ -60,7 +63,8 @@ def reference(t: float) -> np.ndarray:
 
     # PART (d) ##################################################
     # INSTRUCTIONS: Compute the reference state for a given time
-    raise NotImplementedError()
+    ω = 2 * np.pi / T
+    return np.array([a * np.sin(ω * t), np.pi, a * ω * np.cos(ω * t), 0.0])
     # END PART (d) ##############################################
 
 
@@ -85,8 +89,12 @@ def ricatti_recursion(
     for i in range(max_iters):
         # PART (b) ##################################################
         # INSTRUCTIONS: Apply the Ricatti equation until convergence
-        K = NotImplemented
-        raise NotImplementedError()
+        K = -np.linalg.solve(R + B.T @ P_prev @ B, B.T @ P_prev @ A)
+        P = Q + A.T @ P_prev @ (A + B @ K)
+        if np.max(np.abs(P - P_prev)) < eps:
+            converged = True
+            break
+        P_prev = P
         # END PART (b) ##############################################
     if not converged:
         raise RuntimeError("Ricatti recursion did not converge!")
@@ -119,9 +127,13 @@ def simulate(
     # PART (c) ##################################################
     # INSTRUCTIONS: Complete the function to simulate the cartpole system
     # Hint: use the cartpole wrapper above with odeint
-    s = NotImplemented
-    u = NotImplemented
-    raise NotImplementedError()
+    s = np.zeros((t.size, n))
+    u = np.zeros((t.size, m))
+    s[0] = s0
+    for k in range(t.size - 1):
+        u[k] = u_ref + K @ (s[k] - s_ref[k])
+        s[k + 1] = odeint(cartpole_wrapper, s[k], t[k : k + 2], args=(u[k],))[1]
+    u[-1] = u[-2]
     # END PART (c) ##############################################
     return s, u
 
@@ -136,8 +148,17 @@ def compute_lti_matrices() -> tuple[np.ndarray, np.ndarray]:
     """
     # PART (a) ##################################################
     # INSTRUCTIONS: Construct the A and B matrices
-    A = NotImplemented
-    B = NotImplemented
+    F = np.array(
+        [
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+            [0.0, mp * g / mc, 0.0, 0.0],
+            [0.0, (mc + mp) * g / (mc * L), 0.0, 0.0],
+        ]
+    )
+    G = np.array([[0.0], [0.0], [1.0 / mc], [1.0 / (mc * L)]])
+    A = np.eye(n) + dt * F
+    B = dt * G
     # END PART (a) ##############################################
     return A, B
 
@@ -167,12 +188,12 @@ def plot_state_and_control_history(
         axes[n + i].plot(t, u[:, i])
         axes[n + i].set_xlabel(r"$t$")
         axes[n + i].set_ylabel(labels_u[i])
-    plt.savefig(f"{name}.png", bbox_inches="tight")
+    plt.savefig(FIG_DIR / f"{name}.png", bbox_inches="tight")
     plt.show()
 
     if animate:
         fig, ani = animate_cartpole(t, s[:, 0], s[:, 1])
-        ani.save(f"{name}.mp4", writer="ffmpeg")
+        ani.save(FIG_DIR / f"{name}.mp4", writer="ffmpeg")
         plt.show()
 
 
