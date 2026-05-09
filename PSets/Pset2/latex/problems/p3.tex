@@ -2,7 +2,24 @@
 \section*{2.3 Cart-Pole Balance}
 
 \subsection*{2.3(a)}
-With \(\tilde s_k=s_k-\bar s\), Euler discretization gives
+Start with the Euler approximation
+\[
+    s_{k+1}\approx s_k+\Delta t f(s_k,u_k)
+\]
+Now linearize around $\bar s=(0,\pi,0,0), \bar u=0$, and use
+\(\tilde s_k=s_k-\bar s\). This gives
+\[
+    \tilde s_{k+1}\approx
+    \left(I+\Delta t\frac{\partial f}{\partial s}(\bar s,\bar u)\right)\tilde s_k
+    +\Delta t\frac{\partial f}{\partial u}(\bar s,\bar u)u_k
+\]
+So the discrete-time linearized system has
+\[
+    A=I+\Delta t\frac{\partial f}{\partial s}(\bar s,\bar u),
+    \qquad
+    B=\Delta t\frac{\partial f}{\partial u}(\bar s,\bar u)
+\]
+Plugging in the Jacobians from the problem statement gives
 \[
     \tilde s_{k+1}\approx A\tilde s_k+Bu_k
 \]

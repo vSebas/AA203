@@ -1,15 +1,71 @@
 \section*{2.5 Machine Maintenance}
 
-Let \(V_R(h)\) and \(V_B(h)\) denote the optimal expected profit with \(h\)
-weeks remaining when the machine starts the week running or broken.
+This is a finite-horizon stochastic DP problem. The state is the condition of the machine at the start of a week:
+running \(R\) or broken \(B\). The action is chosen after observing this state,
+so the solution is a closed-loop policy rather than one fixed open-loop action
+sequence.
+
+Let \(V_R(h)\) and \(V_B(h)\) be the optimal expected profit with \(h\) weeks
+remaining when the machine starts the week running or broken. Since this
+problem asks for profit, the Bellman recursion uses a maximum:
+\[
+V_h(x)=\max_{u\in U(x)}\mathbb E\left[
+    \text{one-week profit}+V_{h-1}(x')
+\right]
+\]
+
+For a running machine, the two choices are preventive maintenance \(M\) and no
+maintenance \(N\). The one-step action values are
 \[
 \begin{aligned}
-V_R(h)&=\max\{40+0.6V_R(h-1)+0.4V_B(h-1),\\
-&\qquad\qquad 30+0.3V_R(h-1)+0.7V_B(h-1)\},\\
-V_B(h)&=\max\{20+0.6V_R(h-1)+0.4V_B(h-1),\ -50+V_R(h-1)\}.
+Q_R^M(h)&=0.6\left(80+V_R(h-1)\right)
+        +0.4\left(-20+V_B(h-1)\right)\\
+Q_R^N(h)&=0.3\left(100+V_R(h-1)\right)
+        +0.7V_B(h-1)
 \end{aligned}
 \]
-With \(V_R(0)=V_B(0)=0\), the computed values are
+Here \(80=100-20\) is the profit if maintenance is done and the machine runs,
+and \(-20\) is the maintenance cost if it still breaks.
+
+For a broken machine, the two choices are repair \(C\) and replacement \(P\).
+The corresponding action values are
+\[
+\begin{aligned}
+Q_B^C(h)&=0.6\left(60+V_R(h-1)\right)
+        +0.4\left(-40+V_B(h-1)\right)\\
+Q_B^P(h)&=-50+V_R(h-1)
+\end{aligned}
+\]
+The repair value uses \(60=100-40\), while replacement gives a new machine
+that is guaranteed to run for the current week, so its immediate net profit is
+\(100-150=-50\).
+
+The DP update is therefore
+\[
+\begin{aligned}
+V_R(h)&=\max\left\{
+40+0.6V_R(h-1)+0.4V_B(h-1),\
+30+0.3V_R(h-1)+0.7V_B(h-1)
+\right\}\\
+V_B(h)&=\max\left\{
+20+0.6V_R(h-1)+0.4V_B(h-1),\
+-50+V_R(h-1)
+\right\}
+\end{aligned}
+\]
+with terminal values \(V_R(0)=V_B(0)=0\).
+
+Working backward gives the action values
+\[
+\begin{array}{c|cc|cc}
+h & Q_R^M(h) & Q_R^N(h) & Q_B^C(h) & Q_B^P(h)\\
+\hline
+1 & 40 & 30 & 20 & -50\\
+2 & 72 & 56 & 52 & -10\\
+3 & 104 & 88 & 84 & 22
+\end{array}
+\]
+so the value functions are
 \[
 \begin{array}{c|cccc}
 h&0&1&2&3\\
@@ -18,9 +74,12 @@ V_R(h)&0&40&72&104\\
 V_B(h)&0&20&52&84
 \end{array}
 \]
-The optimal policy is to perform preventive maintenance when running and to
-repair when broken. Since the machine is new at week 1 and guaranteed to run
-through that week, the total expected profit over four weeks is
+At each remaining horizon, preventive maintenance is better when the machine is
+running, and repair is better when the machine is broken.
+
+The first week is handled separately because the machine is new and guaranteed
+to run through that week. After receiving the first week's profit, there are
+three weeks left with the machine running, so the total expected profit is
 \[
-    \boxed{100+V_R(3)=204}.
+    \boxed{100+V_R(3)=204}
 \]

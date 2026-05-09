@@ -2,38 +2,70 @@
 \section*{2.4 Cart-Pole Swing-Up}
 
 \subsection*{2.4(a)}
-The requested one-line JAX linearization is
 \begin{lstlisting}
 A, B = jax.jacobian(f, argnums=(0, 1))(s, u)
 \end{lstlisting}
 
 \subsection*{2.4(b)}
-Let
+First write the actual trajectory as the nominal trajectory plus a deviation
 \[
-    \tilde s_k=s_k-\bar s_k,\qquad \tilde u_k=u_k-\bar u_k.
+    \tilde s_k=s_k-\bar s_k,\qquad \tilde u_k=u_k-\bar u_k
 \]
-Expanding the quadratic cost gives linear terms
+or equivalently
+\[
+    s_k=\bar s_k+\tilde s_k,\qquad u_k=\bar u_k+\tilde u_k
+\]
+For the state part of the stage cost, this gives
+\[
+\begin{aligned}
+\frac12(s_k-s_{\rm goal})^TQ(s_k-s_{\rm goal})
+&=
+\frac12(\tilde s_k+\bar s_k-s_{\rm goal})^T
+Q(\tilde s_k+\bar s_k-s_{\rm goal})\\
+&=
+\frac12\tilde s_k^TQ\tilde s_k
++(\bar s_k-s_{\rm goal})^TQ\tilde s_k
++\text{constant}
+\end{aligned}
+\]
+The input cost expands the same way
+\[
+\begin{aligned}
+\frac12u_k^TRu_k
+&=
+\frac12(\bar u_k+\tilde u_k)^TR(\bar u_k+\tilde u_k)\\
+&=
+\frac12\tilde u_k^TR\tilde u_k
++\bar u_k^TR\tilde u_k
++\text{constant}
+\end{aligned}
+\]
+The terminal state cost is also the same pattern
+\[
+\frac12(s_N-s_{\rm goal})^TQ_N(s_N-s_{\rm goal})
+=
+\frac12\tilde s_N^TQ_N\tilde s_N
++(\bar s_N-s_{\rm goal})^TQ_N\tilde s_N
++\text{constant}
+\]
+After dropping constants, the linear terms are
 \[
     q_N=Q_N(\bar s_N-s_{\rm goal}),\qquad
     q_k=Q(\bar s_k-s_{\rm goal}),\qquad
-    r_k=R\bar u_k.
+    r_k=R\bar u_k
 \]
 
-\subsection*{2.4(c)}
-The iLQR implementation is in \texttt{figures/cartpole\_swingup.py}. It computes
-linearizations, performs the Riccati backward pass for feedback gains \(Y_k\)
-and offsets \(y_k\), updates the nominal trajectory, and uses backtracking to
-keep the update stable.
+\subsection*{2.4(d)}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/cartpole_swingup_ol.png}
+\caption{Open-loop application of the iLQR control sequence.}
+\end{figure}
 
-% \subsection*{2.4(d)}
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{figures/cartpole_swingup_ol.png}
-% \caption{Open-loop application of the iLQR control sequence.}
-% \end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/cartpole_swingup_cl.png}
+\caption{Closed-loop iLQR policy.}
+\end{figure}
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=\textwidth]{figures/cartpole_swingup_cl.png}
-% \caption{Closed-loop iLQR policy.}
-% \end{figure}
+Code in Appendix: \hyperref[cartpole_swingup]{\texttt{cartpole\_swingup.py}}.

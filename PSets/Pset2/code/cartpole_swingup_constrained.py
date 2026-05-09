@@ -20,10 +20,8 @@ import numpy as np
 
 from tqdm import tqdm
 
-
 FIG_DIR = Path(__file__).resolve().parents[1] / "latex" / "figures"
 FIG_DIR.mkdir(parents=True, exist_ok=True)
-
 
 @partial(jax.jit, static_argnums=(0,))
 @partial(jax.vmap, in_axes=(None, 0, 0))

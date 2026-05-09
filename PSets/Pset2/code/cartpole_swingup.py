@@ -18,10 +18,8 @@ import numpy as np
 
 from scipy.integrate import odeint
 
-
 FIG_DIR = Path(__file__).resolve().parents[1] / "latex" / "figures"
 FIG_DIR.mkdir(parents=True, exist_ok=True)
-
 
 def linearize(f, s, u):
     """Linearize the function `f(s, u)` around `(s, u)`.
@@ -108,13 +106,6 @@ def ilqr(f, s0, s_goal, N, Q, R, QN, eps=1e-3, max_iters=1000):
     ds = np.zeros((N + 1, n))
     du = np.zeros((N, m))
 
-    def cost(s, u):
-        J = 0.5 * (s[N] - s_goal) @ QN @ (s[N] - s_goal)
-        for k in range(N):
-            J += 0.5 * (s[k] - s_goal) @ Q @ (s[k] - s_goal)
-            J += 0.5 * u[k] @ R @ u[k]
-        return J
-
     # iLQR loop
     converged = False
     for _ in range(max_iters):
@@ -142,27 +133,32 @@ def ilqr(f, s0, s_goal, N, Q, R, QN, eps=1e-3, max_iters=1000):
             du[k] = Y[k] @ ds[k] + y[k]
             ds[k + 1] = A[k] @ ds[k] + B[k] @ du[k]
 
-        J_prev = cost(s_bar, u_bar)
+        def rollout_cost(s_candidate, u_candidate):
+            J = 0.5 * (s_candidate[N] - s_goal) @ QN @ (s_candidate[N] - s_goal)
+            for j in range(N):
+                J += 0.5 * (s_candidate[j] - s_goal) @ Q @ (s_candidate[j] - s_goal)
+                J += 0.5 * u_candidate[j] @ R @ u_candidate[j]
+            return J
+
+        J_prev = rollout_cost(s_bar, u_bar)
         accepted = False
-        for α in (1.0, 0.5, 0.25, 0.1, 0.05, 0.01):
-            u_next = u_bar + α * du
+        for alpha in (1.0, 0.5, 0.25, 0.1, 0.05, 0.01):
+            u_next = u_bar + alpha * du
             s_next = np.zeros_like(s_bar)
             s_next[0] = s0
             for k in range(N):
                 s_next[k + 1] = f(s_next[k], u_next[k])
-            if np.all(np.isfinite(s_next)) and cost(s_next, u_next) < J_prev:
+            if np.all(np.isfinite(s_next)) and rollout_cost(s_next, u_next) < J_prev:
                 accepted = True
+                du *= alpha
+                u_bar = u_next
+                s_bar = s_next
                 break
         if not accepted:
-            α = 0.0
-            u_next = u_bar
-            s_next = s_bar
             du.fill(0.0)
-        u_bar = u_next
-        s_bar = s_next
         #######################################################################
 
-        if np.max(np.abs(α * du)) < eps:
+        if np.max(np.abs(du)) < eps:
             converged = True
             break
     if not converged:
@@ -202,8 +198,8 @@ s0 = np.array([0.0, 0.0, 0.0, 0.0])  # initial state
 s_goal = np.array([0.0, np.pi, 0.0, 0.0])  # goal state
 T = 10.0  # simulation time
 dt = 0.1  # sampling time
-animate = False  # flag for animation
-closed_loop = False  # flag for closed-loop control
+animate = True  # flag for animation
+closed_loop = True  # flag for closed-loop control
 
 # Initialize continuous-time and discretized dynamics
 f = jax.jit(cartpole)
@@ -217,48 +213,44 @@ N = t.size - 1
 s_bar, u_bar, Y, y = ilqr(fd, s0, s_goal, N, Q, R, QN)
 print("done! ({:.2f} s)".format(time.time() - start), flush=True)
 
-def simulate_and_plot(closed_loop):
-    """Simulate either the open-loop sequence or closed-loop iLQR policy."""
-    print("Simulating {} ... ".format("closed-loop" if closed_loop else "open-loop"), end="", flush=True)
-    start = time.time()
-    s = np.zeros((N + 1, n))
-    u = np.zeros((N, m))
-    s[0] = s0
-    for k in range(N):
-        # PART (d) ############################################################
-        # INSTRUCTIONS: Compute either the closed-loop or open-loop value of
-        # `u[k]`, depending on the Boolean flag `closed_loop`.
-        if closed_loop:
-            u[k] = u_bar[k] + Y[k] @ (s[k] - s_bar[k]) + y[k]
-        else:  # do open-loop control
-            u[k] = u_bar[k]
-        #######################################################################
-        s[k + 1] = odeint(lambda s, t: f(s, u[k]), s[k], t[k : k + 2])[1]
-    print("done! ({:.2f} s)".format(time.time() - start), flush=True)
-
-    fig, axes = plt.subplots(1, n + m, dpi=150, figsize=(15, 2))
-    plt.subplots_adjust(wspace=0.45)
-    labels_s = (r"$x(t)$", r"$\theta(t)$", r"$\dot{x}(t)$", r"$\dot{\theta}(t)$")
-    labels_u = (r"$u(t)$",)
-    for i in range(n):
-        axes[i].plot(t, s[:, i])
-        axes[i].set_xlabel(r"$t$")
-        axes[i].set_ylabel(labels_s[i])
-    for i in range(m):
-        axes[n + i].plot(t[:-1], u[:, i])
-        axes[n + i].set_xlabel(r"$t$")
-        axes[n + i].set_ylabel(labels_u[i])
+# Simulate on the true continuous-time system
+print("Simulating ... ", end="", flush=True)
+start = time.time()
+s = np.zeros((N + 1, n))
+u = np.zeros((N, m))
+s[0] = s0
+for k in range(N):
+    # PART (d) ################################################################
+    # INSTRUCTIONS: Compute either the closed-loop or open-loop value of
+    # `u[k]`, depending on the Boolean flag `closed_loop`.
     if closed_loop:
-        plt.savefig(FIG_DIR / "cartpole_swingup_cl.png", bbox_inches="tight")
-    else:
-        plt.savefig(FIG_DIR / "cartpole_swingup_ol.png", bbox_inches="tight")
-    plt.show()
+        u[k] = u_bar[k] + Y[k] @ (s[k] - s_bar[k]) + y[k]
+    else:  # do open-loop control
+        u[k] = u_bar[k]
+    ###########################################################################
+    s[k + 1] = odeint(lambda s, t: f(s, u[k]), s[k], t[k : k + 2])[1]
+print("done! ({:.2f} s)".format(time.time() - start), flush=True)
 
-    if animate:
-        fig, ani = animate_cartpole(t, s[:, 0], s[:, 1])
-        ani.save(FIG_DIR / "cartpole_swingup.mp4", writer="ffmpeg")
-        plt.show()
+# Plot
+fig, axes = plt.subplots(1, n + m, dpi=150, figsize=(15, 2))
+plt.subplots_adjust(wspace=0.45)
+labels_s = (r"$x(t)$", r"$\theta(t)$", r"$\dot{x}(t)$", r"$\dot{\theta}(t)$")
+labels_u = (r"$u(t)$",)
+for i in range(n):
+    axes[i].plot(t, s[:, i])
+    axes[i].set_xlabel(r"$t$")
+    axes[i].set_ylabel(labels_s[i])
+for i in range(m):
+    axes[n + i].plot(t[:-1], u[:, i])
+    axes[n + i].set_xlabel(r"$t$")
+    axes[n + i].set_ylabel(labels_u[i])
+if closed_loop:
+    plt.savefig(FIG_DIR / "cartpole_swingup_cl.png", bbox_inches="tight")
+else:
+    plt.savefig(FIG_DIR / "cartpole_swingup_ol.png", bbox_inches="tight")
+# plt.show()
 
-
-simulate_and_plot(False)
-simulate_and_plot(True)
+if animate:
+    fig, ani = animate_cartpole(t, s[:, 0], s[:, 1])
+    ani.save(FIG_DIR / "cartpole_swingup.mp4", writer="ffmpeg")
+    # plt.show()
