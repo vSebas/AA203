@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red!50!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    literate={α}{{$\alpha$}}1 {θ}{{$\theta$}}1 {ρ}{{$\rho$}}1 {ω}{{$\omega$}}1 {∞}{{$\infty$}}1
+}
+
+\begin{document}
+
+\include{problems/p1}
+\newpage
+% \include{problems/p2}
+% \newpage
+% \include{problems/p3}
+% \newpage
+% \include{problems/p4}
+% \newpage
+% \include{problems/p5}
+% \newpage
+\include{problems/code}
+
+\end{document}
