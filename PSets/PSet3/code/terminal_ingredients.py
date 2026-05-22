@@ -76,7 +76,7 @@ def semi_def_program():
     plt.title(r"Ellipsoids: $A X_T \subseteq X_T \subseteq X$")
     plt.savefig("ellipsoids.png")
 
-    return A, B, rx, M.value, W
+    return A, B, M.value, W
 
 def setup_mpc(A, B, W, N=4, rx=5.0, ru=1.0):
     n, m = B.shape
@@ -100,7 +100,7 @@ def setup_mpc(A, B, W, N=4, rx=5.0, ru=1.0):
         ]
 
     cost += cp.quad_form(x[N, :], P)
-    constraints += cp.quad_form(x[N, :], W) <= 1
+    constraints += [cp.quad_form(x[N, :], W) <= 1]
 
     prob = cp.Problem(cp.Minimize(cost), constraints)
     return prob, x0, x, u

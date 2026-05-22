@@ -36,4 +36,101 @@ ahead. The strict terminal constraint \(r_f=0\) makes the ROA smaller, while
 \end{figure}
 
 \subsection{Code}
-Code in \hyperref[mpc_feasibility]{Appendix}.
+\subsubsection*{(a)}
+\begin{lstlisting}
+    def do_mpc(
+    x0: np.ndarray,
+    A: np.ndarray,
+    B: np.ndarray,
+    P: np.ndarray,
+    Q: np.ndarray,
+    R: np.ndarray,
+    N: int,
+    rx: float,
+    ru: float,
+    rf: float,
+) -> tuple[np.ndarray, np.ndarray, str]:
+    """Solve the MPC problem starting at state `x0`."""
+    n, m = Q.shape[0], R.shape[0]
+    x_cvx = cvx.Variable((N + 1, n))
+    u_cvx = cvx.Variable((N, m))
+
+    # PART (a): YOUR CODE BELOW ###############################################
+    # INSTRUCTIONS: Construct and solve the MPC problem using CVXPY.
+
+    cost = 0.0
+    constraints = [x_cvx[0,:] == x0]
+    
+    # N is the horizon
+    for t in range(N):
+        # running cost
+        cost += cvx.quad_form(x_cvx[t,:], Q) + cvx.quad_form(u_cvx[t,:], R)
+
+        constraints.append(x_cvx[t+1,:] == A@x_cvx[t,:] + B@u_cvx[t,:])
+        constraints.append(cvx.norm_inf(x_cvx[t,:]) <= rx)
+        constraints.append(cvx.norm_inf(u_cvx[t,:]) <= ru)
+
+    # auxiliary cost
+    cost += cvx.quad_form(x_cvx[N,:], P)
+    constraints.append(cvx.norm_inf(x_cvx[N,:]) <= rx)
+    constraints.append(cvx.norm_inf(x_cvx[N,:]) <= rf)
+
+    # END PART (a) ############################################################
+
+    prob = cvx.Problem(cvx.Minimize(cost), constraints)
+    prob.solve(cvx.CLARABEL)
+    x = x_cvx.value
+    u = u_cvx.value
+    status = prob.status
+
+    return x, u, status
+\end{lstlisting}
+
+\subsubsection*{(b)}
+\begin{lstlisting}
+    def compute_roa(
+    A: np.ndarray,
+    B: np.ndarray,
+    P: np.ndarray,
+    Q: np.ndarray,
+    R: np.ndarray,
+    N: int,
+    rx: float,
+    ru: float,
+    rf: float,
+    grid_dim: int = 21,
+    max_steps: int = 20,
+    tol: float = 1e-2,
+) -> np.ndarray:
+    """Compute a region of attraction."""
+    roa = np.zeros((grid_dim, grid_dim))
+    xs = np.linspace(-rx, rx, grid_dim)
+    for i, x1 in enumerate(xs):
+        for j, x2 in enumerate(xs):
+            x = np.array([x1, x2])
+            # PART (b): YOUR CODE BELOW #######################################
+            # INSTRUCTIONS: Simulate the closed-loop system for `max_steps`,
+            #               stopping early only if the problem becomes
+            #               infeasible or the state has converged close enough
+            #               to the origin. If the state converges, flag the
+            #               corresponding entry of `roa` with a value of `1`.
+
+            for _ in range(max_steps):
+                x_mpc, u_mpc, status = do_mpc(x, A, B, P, Q, R, N, rx, ru, rf)
+
+                if status == "infeasible":
+                    break
+
+                if np.linalg.norm(x) <= tol:
+                    roa[i, j] = 1
+                    break
+
+                x = A @ x + B @ u_mpc[0, :]
+
+        if np.linalg.norm(x) <= tol:
+            roa[i, j] = 1
+
+            # END PART (b) ####################################################
+    return roa
+\end{lstlisting}
+% Code in \hyperref[mpc_feasibility]{Appendix}.
