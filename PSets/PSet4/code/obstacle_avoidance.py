@@ -41,9 +41,7 @@ def signed_distances(s, centers, radii):
 
     # PART (a): YOUR CODE BELOW ###############################################
     # INSTRUCTIONS: Compute the vector of signed distances to each obstacle.
-
-    d = NotImplementedError()
-
+    d = jnp.linalg.norm(s[:2] - centers, axis=1) - radii
     # END PART (a) ############################################################
     return d
 
@@ -54,10 +52,8 @@ def affinize(f, s, u):
     """Affinize the function `f(s, u)` around `(s, u)`."""
     # PART (b) ################################################################
     # INSTRUCTIONS: Use JAX to affinize `f` around `(s,u)` in two lines.
-
-    A, B = NotImplementedError()
-    c = NotImplementedError()
-
+    A,B = jax.jacobian(f, argnums=(0,1))(s,u)
+    c = f(s,u) - A @ s - B @ u
     # END PART (b) ############################################################
     return A, B, c
 
@@ -82,8 +78,16 @@ def scp_iteration(f, d, s0, s_goal, s_prev, u_prev, P, Q, R):
     # INSTRUCTIONS: Construct the convex SCP sub-problem.
 
     objective = 0.0
-    constraints = []
+    constraints = [ s_cvx[0,:] == s0 ]
 
+    for t in range(N):
+        objective += cvx.quad_form(s_cvx[t,:] - s_goal,Q) + cvx.quad_form(u_cvx[t,:], R)
+        constraints += [    Ad[t] @ s_cvx[t,:] + cd[t] >= 0,
+                            s_cvx[t+1] == Af[t] @ s_cvx[t,:] + Bf[t] @ u_cvx[t,:] + cf[t]    ]
+        
+    objective += cvx.quad_form(s_cvx[N,:] - s_goal,P)
+    constraints += [Ad[N] @ s_cvx[N, :] + cd[N] >= 0]
+        
     # END PART (e) ############################################################
 
     prob = cvx.Problem(cvx.Minimize(objective), constraints)
@@ -182,11 +186,11 @@ for t in tqdm(range(T)):
 
     # Solve the MPC problem at time `t`
     # Hint: You should call `solve_obstacle_avoidance_scp` here
-    s_mpc[t], u_mpc[t] = NotImplementedError()
+    s_mpc[t], u_mpc[t] = solve_obstacle_avoidance_scp(f,d,s,s_goal,N,P,Q,R,eps,N_scp,s_init,u_init)
 
     # Push the state `s` forward in time with a closed-loop MPC input
     # Hint: You should call `f` here
-    s = NotImplementedError()
+    s = np.array(f(s,u_mpc[t,0]))
 
     # END PART (f) ############################################################
 
