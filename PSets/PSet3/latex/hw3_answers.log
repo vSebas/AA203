@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.22)  22 MAY 2026 16:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.22)  22 MAY 2026 17:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -296,7 +296,7 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 ) (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count319
-) (./hw3_answers.aux (./problems/p1.aux) (./problems/p3.aux) (./problems/p4.aux) (./problems/code.aux))
+) (./hw3_answers.aux (./problems/p1.aux) (./problems/p2.aux) (./problems/p3.aux) (./problems/p4.aux) (./problems/code.aux))
 \openout1 = `hw3_answers.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
@@ -380,12 +380,12 @@ Package hyperref Info: Link coloring OFF on input line 29.
 \openout2 = `problems/p1.aux'.
 
  (./problems/p1.tex
-<figures/optimal_value_heatmap.png, id=40, 462.528pt x 346.896pt>
+<figures/optimal_value_heatmap.png, id=44, 462.528pt x 346.896pt>
 File: figures/optimal_value_heatmap.png Graphic file (type png)
 <use figures/optimal_value_heatmap.png>
 Package pdftex.def Info: figures/optimal_value_heatmap.png  used on input line 7.
 (pdftex.def)             Requested size: 256.55872pt x 192.42897pt.
-<figures/policy_heatmap_path.png, id=43, 462.528pt x 346.896pt>
+<figures/policy_heatmap_path.png, id=47, 462.528pt x 346.896pt>
 File: figures/policy_heatmap_path.png Graphic file (type png)
 <use figures/policy_heatmap_path.png>
 Package pdftex.def Info: figures/policy_heatmap_path.png  used on input line 18.
@@ -394,84 +394,97 @@ Package pdftex.def Info: figures/policy_heatmap_path.png  used on input line 18.
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figures/optimal_value_heatmap.png> <./figures/policy_heatmap_path.png>]
-\openout2 = `problems/p3.aux'.
+\openout2 = `problems/p2.aux'.
 
- (./problems/p3.tex
-LaTeX Font Info:    Trying to load font information for U+msa on input line 11.
+ (./problems/p2.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 4.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 11.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 4.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<figures/mpc_feasibility_sim.png, id=58, 619.5948pt x 505.4082pt>
-File: figures/mpc_feasibility_sim.png Graphic file (type png)
-<use figures/mpc_feasibility_sim.png>
-Package pdftex.def Info: figures/mpc_feasibility_sim.png  used on input line 18.
-(pdftex.def)             Requested size: 256.55872pt x 209.28548pt.
-<figures/mpc_feasibility_roa.png, id=60, 608.9952pt x 617.6676pt>
-File: figures/mpc_feasibility_roa.png Graphic file (type png)
-<use figures/mpc_feasibility_roa.png>
-Package pdftex.def Info: figures/mpc_feasibility_roa.png  used on input line 33.
-(pdftex.def)             Requested size: 359.18063pt x 364.30763pt.
+<figures/isosurface.png, id=61, 1559.8275pt x 672.5125pt>
+File: figures/isosurface.png Graphic file (type png)
+<use figures/isosurface.png>
+Package pdftex.def Info: figures/isosurface.png  used on input line 48.
+(pdftex.def)             Requested size: 333.52321pt x 143.79721pt.
  [2
 
 
 
- <./figures/mpc_feasibility_sim.png>] [3 <./figures/mpc_feasibility_roa.png>] [4]) [5]
+ <./figures/isosurface.png>]) [3]
+\openout2 = `problems/p3.aux'.
+
+ (./problems/p3.tex
+<figures/mpc_feasibility_sim.png, id=87, 619.5948pt x 505.4082pt>
+File: figures/mpc_feasibility_sim.png Graphic file (type png)
+<use figures/mpc_feasibility_sim.png>
+Package pdftex.def Info: figures/mpc_feasibility_sim.png  used on input line 18.
+(pdftex.def)             Requested size: 256.55872pt x 209.28548pt.
+<figures/mpc_feasibility_roa.png, id=89, 608.9952pt x 617.6676pt>
+File: figures/mpc_feasibility_roa.png Graphic file (type png)
+<use figures/mpc_feasibility_roa.png>
+Package pdftex.def Info: figures/mpc_feasibility_roa.png  used on input line 33.
+(pdftex.def)             Requested size: 359.18063pt x 364.30763pt.
+ [4
+
+
+
+ <./figures/mpc_feasibility_sim.png>] [5 <./figures/mpc_feasibility_roa.png>] [6]) [7]
 \openout2 = `problems/p4.aux'.
 
- (./problems/p4.tex [6
+ (./problems/p4.tex [8
 
 
 
 ]
-<figures/ellipsoids.png, id=191, 505.89pt x 505.89pt>
+<figures/ellipsoids.png, id=217, 505.89pt x 505.89pt>
 File: figures/ellipsoids.png Graphic file (type png)
 <use figures/ellipsoids.png>
 Package pdftex.def Info: figures/ellipsoids.png  used on input line 81.
 (pdftex.def)             Requested size: 256.55872pt x 256.5647pt.
-<figures/terminal_mpc_trajectory.png, id=192, 505.89pt x 505.89pt>
+<figures/terminal_mpc_trajectory.png, id=218, 505.89pt x 505.89pt>
 File: figures/terminal_mpc_trajectory.png Graphic file (type png)
 <use figures/terminal_mpc_trajectory.png>
 Package pdftex.def Info: figures/terminal_mpc_trajectory.png  used on input line 88.
 (pdftex.def)             Requested size: 256.55872pt x 256.5647pt.
-<figures/terminal_mpc_control.png, id=193, 462.528pt x 346.896pt>
+<figures/terminal_mpc_control.png, id=219, 462.528pt x 346.896pt>
 File: figures/terminal_mpc_control.png Graphic file (type png)
 <use figures/terminal_mpc_control.png>
 Package pdftex.def Info: figures/terminal_mpc_control.png  used on input line 89.
 (pdftex.def)             Requested size: 256.55872pt x 192.42897pt.
- [7 <./figures/ellipsoids.png>]) [8 <./figures/terminal_mpc_trajectory.png> <./figures/terminal_mpc_control.png>]
+ [9 <./figures/ellipsoids.png>]) [10 <./figures/terminal_mpc_trajectory.png> <./figures/terminal_mpc_control.png>]
 \openout2 = `problems/code.aux'.
 
  (./problems/code.tex
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 14.
- (../code/markovian_drone.py [9
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 15.
+ (../code/markovian_drone.py [11
 
 
 
-] [10{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) (../code/terminal_ingredients.py [11] [12] [13])) [14] (./hw3_answers.aux (./problems/p1.aux) (./problems/p3.aux) (./problems/p4.aux) (./problems/code.aux))
+] [12{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) (../code/starter_hj_reachability.py [13] [14] [15] [16] [17] [18] [19]) (../code/terminal_ingredients.py [20] [21] [22])) [23] (./hw3_answers.aux (./problems/p1.aux) (./problems/p2.aux) (./problems/p3.aux) (./problems/p4.aux) (./problems/code.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `hw3_answers.out' has not changed.
-(rerunfilecheck)             Checksum: 7EE7BA6A22FCB99E90DBAFA046034A90;1277.
+(rerunfilecheck)             Checksum: D35FB03244EEF1FEE011D51294C8952F;1414.
  ) 
 Here is how much of TeX's memory you used:
- 13246 strings out of 469515
- 196337 string characters out of 5470807
- 1212816 words of memory out of 5000000
- 41275 multiletter control sequences out of 15000+600000
+ 13874 strings out of 469515
+ 206345 string characters out of 5470807
+ 1368816 words of memory out of 5000000
+ 41441 multiletter control sequences out of 15000+600000
  636709 words of font info for 75 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,8n,79p,320b,2119s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on hw3_answers.pdf (14 pages, 456561 bytes).
+ 75i,8n,79p,326b,2119s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
+Output written on hw3_answers.pdf (23 pages, 594480 bytes).
 PDF statistics:
- 711 PDF objects out of 1000 (max. 8388607)
- 646 compressed objects within 7 object streams
- 443 named destinations out of 1000 (max. 500000)
- 108 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1298 PDF objects out of 1440 (max. 8388607)
+ 1214 compressed objects within 13 object streams
+ 895 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
 

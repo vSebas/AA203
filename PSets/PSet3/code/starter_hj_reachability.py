@@ -81,7 +81,19 @@ class PlanarQuadrotor:
         # PART (a): WRITE YOUR CODE BELOW ###############################################
         # You may find `jnp.where` to be useful; see corresponding numpy docstring:
         # https://numpy.org/doc/stable/reference/generated/numpy.where.html
-        raise NotImplementedError
+        y, v_y, phi, omega = state
+        p_y, p_v_y, p_phi, p_omega = grad_value
+        del y, v_y, p_y, p_phi
+
+        thrust_min = jnp.asarray(self.min_thrust_per_prop, dtype=jnp.float32)
+        thrust_max = jnp.asarray(self.max_thrust_per_prop, dtype=jnp.float32)
+
+        coeff_T_1 = p_v_y * jnp.cos(phi) / self.m - p_omega * self.l / self.Iyy
+        coeff_T_2 = p_v_y * jnp.cos(phi) / self.m + p_omega * self.l / self.Iyy
+
+        T_1 = jnp.where(coeff_T_1 <= 0.0, thrust_max, thrust_min)
+        T_2 = jnp.where(coeff_T_2 <= 0.0, thrust_max, thrust_min)
+        return jnp.array([T_1, T_2])
         #################################################################################
 
     def hamiltonian(self, state, time, value, grad_value):
@@ -123,7 +135,18 @@ def target_set(state):
         A scalar, nonpositive iff the state is in the target set.
     """
     # PART (b): WRITE YOUR CODE BELOW ###############################################
-    raise NotImplementedError
+    y, v_y, phi, omega = state
+    return jnp.max(
+        jnp.array(
+            [
+                3.0 - y,
+                y - 7.0,
+                jnp.abs(v_y) - 1.0,
+                jnp.abs(phi) - jnp.pi / 12.0,
+                jnp.abs(omega) - 1.0,
+            ]
+        )
+    )
     #################################################################################
 
 
@@ -137,7 +160,17 @@ def envelope_set(state):
         A scalar, nonpositive iff the state is in the operational envelope.
     """
     # PART (c): WRITE YOUR CODE BELOW ###############################################
-    raise NotImplementedError
+    y, v_y, phi, omega = state
+    return jnp.max(
+        jnp.array(
+            [
+                1.0 - y,
+                y - 9.0,
+                jnp.abs(v_y) - 6.0,
+                jnp.abs(omega) - 8.0,
+            ]
+        )
+    )
     #################################################################################
 
 
@@ -356,25 +389,25 @@ def animate_optimal_trajectory(full_state, dt=1 / 100, T=5):
 state = [5.0, -5.0, 0.0, 0.0]
 fig, ani = animate_optimal_trajectory(np.array([0, 0] + state))
 ani.save("planar_quad_1.mp4", writer="ffmpeg")
-plt.show()
+# plt.show()
 
 # Flipping the quad up into the air.
 state = [6.0, 2.0, -3 * np.pi / 4, -4.0]
 fig, ani = animate_optimal_trajectory(np.array([0, 0] + state))
 ani.save("planar_quad_2.mp4", writer="ffmpeg")
-plt.show()
+# plt.show()
 
 # Dropping the quad like a falling leaf.
 state = [8.0, -0.8, np.pi / 2, 2.0]
 fig, ani = animate_optimal_trajectory(np.array([0, 0] + state))
 ani.save("planar_quad_3.mp4", writer="ffmpeg")
-plt.show()
+# plt.show()
 
 # Too much negative vertical velocity to recover before hitting the floor.
 state = [8.0, -3.0, np.pi / 2, 2.0]
 fig, ani = animate_optimal_trajectory(np.array([0, 0] + state))
 ani.save("planar_quad_4.mp4", writer="ffmpeg")
-plt.show()
+# plt.show()
 
 # Examining an isosurface (exercise part (d)).
 import plotly.graph_objects as go
