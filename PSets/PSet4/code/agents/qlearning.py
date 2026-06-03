@@ -34,12 +34,18 @@ class QLearning(Agent):
         ###     nn.Sequential: https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html
         ###     nn.Linear: https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html
         ###     nn.ReLU: https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html
-        raise NotImplementedError()
+        return torch.nn.Sequential(
+            torch.nn.Linear(self.state_dim, self.hidden_dim),
+            torch.nn.ReLU(),
+            torch.nn.Linear(self.hidden_dim, self.hidden_dim),
+            torch.nn.ReLU(),
+            torch.nn.Linear(self.hidden_dim, self.action_dim),
+        )
         ###########################################################################
     
     def policy(self, state : Union[np.ndarray, torch.tensor], train : bool=False) -> torch.Tensor:
         if isinstance(state, np.ndarray):
-            state = torch.tensor(state).unsqueeze(0).to(self.device)
+            state = torch.tensor(state, dtype=torch.float32).unsqueeze(0).to(self.device)
         ### WRITE YOUR CODE BELOW ###################################################
         ###     1) If train == True, sample from the policy with e-greedy exploration with a decaying epsilon threshold. We've already
         ###     implemented a function you can use to call the exploration threshold at any instance in the iteration i.e., 'self.eps_treshold()'.
@@ -51,7 +57,12 @@ class QLearning(Agent):
         ###     torch.randint: https://docs.pytorch.org/docs/stable/generated/torch.randint.html
         ###     torch.argmax: https://docs.pytorch.org/docs/stable/generated/torch.argmax.html
         ###     torch.no_grad(): https://docs.pytorch.org/docs/stable/generated/torch.no_grad.html
-        raise NotImplementedError()
+        if train and random.random() < self.eps_threshold():
+            return torch.randint(self.action_dim, (1,), device=self.device)
+
+        with torch.no_grad():
+            q_values = self.policy_network(state)
+            return torch.argmax(q_values, dim=-1)
         ###########################################################################
     
     def sample_buffer(self) -> tuple[torch.Tensor, torch.Tensor]:
@@ -81,5 +92,33 @@ class QLearning(Agent):
         ###     torch.optim.AdamW: https://docs.pytorch.org/docs/stable/generated/torch.optim.AdamW.html
         ###     torch.nn.MSELoss: https://docs.pytorch.org/docs/stable/generated/torch.nn.MSELoss.html
         ###     torch.nn.utils.clip_grad_value_: https://docs.pytorch.org/docs/stable/generated/torch.nn.utils.clip_grad_value_.html
-        raise NotImplementedError()
+        optimizer = torch.optim.AdamW(self.policy_network.parameters(), lr=self.learning_rate)
+        loss_fn = torch.nn.MSELoss()
+
+        for _ in tqdm(range(num_episodes)):
+            obs, info = env.reset()
+            state = torch.tensor(obs, dtype=torch.float32).unsqueeze(0).to(self.device)
+            terminated, truncated = False, False
+
+            while not terminated and not truncated:
+                action = self.policy(state, train=True)
+                obs, reward, terminated, truncated, info = env.step(action.item())
+
+                reward = torch.tensor([reward], dtype=torch.float32).to(self.device)
+                next_state = None
+                if not terminated and not truncated:
+                    next_state = torch.tensor(obs, dtype=torch.float32).unsqueeze(0).to(self.device)
+
+                self.buffer.append(Transition(state, action, reward, next_state))
+                state = next_state
+
+                if len(self.buffer) > self.batch_size:
+                    states, actions, targets = self.sample_buffer()
+                    q_values = self.policy_network(states).gather(1, actions)
+                    loss = loss_fn(q_values, targets)
+
+                    optimizer.zero_grad()
+                    loss.backward()
+                    torch.nn.utils.clip_grad_value_(self.policy_network.parameters(), 100)
+                    optimizer.step()
         ###########################################################################

@@ -11,6 +11,7 @@ class ReinforceAgent(Agent):
         self.policy_network = self.build_network()
         self.optimizer = torch.optim.Adam(self.policy_network.parameters())
         self.agent_name = "reinforce"
+        self.gradient_variant = "baseline"
 
     def build_network(self) -> torch.nn.Module:
         return torch.nn.Sequential(
@@ -62,11 +63,37 @@ class ReinforceAgent(Agent):
         ###     torch.stack: https://docs.pytorch.org/docs/stable/generated/torch.stack.html
 
         # 1) Naive REINFORCE
+        discounted_return = torch.tensor(
+            sum((self.gamma ** t) * rewards[t] for t in range(len(rewards))),
+            dtype=torch.float,
+        )
+        naive_loss = -torch.stack(
+            [log_prob * discounted_return for log_prob in log_probs]
+        ).sum()
 
         # 2) REINFORCE with causality trick
+        returns = []
+        running_return = 0.0
+        for reward in reversed(rewards):
+            running_return = reward + self.gamma * running_return
+            returns.insert(0, running_return)
+        returns = torch.tensor(returns, dtype=torch.float)
+        causal_loss = -torch.stack(
+            [log_prob * ret for log_prob, ret in zip(log_probs, returns)]
+        ).sum()
 
         # 3) REINFORCE with causality trick and baseline to "center" the returns
-        loss = None
+        baseline = returns.mean()
+        baseline_loss = -torch.stack(
+            [log_prob * (ret - baseline) for log_prob, ret in zip(log_probs, returns)]
+        ).sum()
+
+        if self.gradient_variant == "naive":
+            loss = naive_loss
+        elif self.gradient_variant == "causal":
+            loss = causal_loss
+        else:
+            loss = baseline_loss
         ###########################################################################
 
         self.optimizer.zero_grad()
