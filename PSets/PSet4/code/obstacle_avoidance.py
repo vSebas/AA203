@@ -167,8 +167,8 @@ radii = np.array([0.5, 0.5])
 
 # PART (g): CHANGE THE PARAMETERS BELOW #######################################
 
-N = 5  # MPC horizon
-N_scp = 5  # maximum number of SCP iterations
+N = 15  # MPC horizon
+N_scp = 2  # maximum number of SCP iterations
 
 # END PART (g) ################################################################
 
@@ -226,4 +226,4 @@ ax[1].legend()
 
 suffix = "_N={}_Nscp={}".format(N, N_scp)
 plt.savefig("soln_obstacle_avoidance" + suffix + ".png", bbox_inches="tight")
-plt.show()
+# plt.show()
