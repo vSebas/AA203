@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.22)  2 JUN 2026 21:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.4.22)  3 JUN 2026 11:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -296,7 +296,7 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 ) (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count319
-) (./hw4_answers.aux (./problems/p1.aux) (./problems/code.aux))
+) (./hw4_answers.aux (./problems/p1.aux) (./problems/p2.aux) (./problems/code.aux))
 \openout1 = `hw4_answers.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
@@ -388,7 +388,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 4.
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<figures/soln_obstacle_avoidance_N=5_Nscp=5.png, id=8, 908.6748pt x 360.3864pt>
+<figures/soln_obstacle_avoidance_N=5_Nscp=5.png, id=12, 908.6748pt x 360.3864pt>
 File: figures/soln_obstacle_avoidance_N=5_Nscp=5.png Graphic file (type png)
 <use figures/soln_obstacle_avoidance_N=5_Nscp=5.png>
 Package pdftex.def Info: figures/soln_obstacle_avoidance_N=5_Nscp=5.png  used on input line 96.
@@ -397,52 +397,67 @@ Package pdftex.def Info: figures/soln_obstacle_avoidance_N=5_Nscp=5.png  used on
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<figures/soln_obstacle_avoidance_N=2_Nscp=5.png, id=29, 908.6748pt x 360.3864pt>
+<figures/soln_obstacle_avoidance_N=2_Nscp=5.png, id=33, 908.6748pt x 360.3864pt>
 File: figures/soln_obstacle_avoidance_N=2_Nscp=5.png Graphic file (type png)
 <use figures/soln_obstacle_avoidance_N=2_Nscp=5.png>
 Package pdftex.def Info: figures/soln_obstacle_avoidance_N=2_Nscp=5.png  used on input line 106.
 (pdftex.def)             Requested size: 513.11745pt x 203.5142pt.
-<figures/soln_obstacle_avoidance_N=5_Nscp=2.png, id=30, 908.6748pt x 360.3864pt>
+<figures/soln_obstacle_avoidance_N=5_Nscp=2.png, id=34, 908.6748pt x 360.3864pt>
 File: figures/soln_obstacle_avoidance_N=5_Nscp=2.png Graphic file (type png)
 <use figures/soln_obstacle_avoidance_N=5_Nscp=2.png>
 Package pdftex.def Info: figures/soln_obstacle_avoidance_N=5_Nscp=2.png  used on input line 116.
 (pdftex.def)             Requested size: 513.11745pt x 203.5142pt.
  [2 <./figures/soln_obstacle_avoidance_N=5_Nscp=5.png> <./figures/soln_obstacle_avoidance_N=2_Nscp=5.png>]
-<figures/soln_obstacle_avoidance_N=15_Nscp=2.png, id=39, 908.6748pt x 360.3864pt>
+<figures/soln_obstacle_avoidance_N=15_Nscp=2.png, id=43, 908.6748pt x 360.3864pt>
 File: figures/soln_obstacle_avoidance_N=15_Nscp=2.png Graphic file (type png)
 <use figures/soln_obstacle_avoidance_N=15_Nscp=2.png>
 Package pdftex.def Info: figures/soln_obstacle_avoidance_N=15_Nscp=2.png  used on input line 126.
 (pdftex.def)             Requested size: 513.11745pt x 203.5142pt.
-) [3 <./figures/soln_obstacle_avoidance_N=5_Nscp=2.png> <./figures/soln_obstacle_avoidance_N=15_Nscp=2.png>]
+ [3 <./figures/soln_obstacle_avoidance_N=5_Nscp=2.png> <./figures/soln_obstacle_avoidance_N=15_Nscp=2.png>]) [4]
+\openout2 = `problems/p2.aux'.
+
+ (./problems/p2.tex
+<figures/widget_sales_qvalues.png, id=104, 723.6636pt x 393.6306pt>
+File: figures/widget_sales_qvalues.png Graphic file (type png)
+<use figures/widget_sales_qvalues.png>
+Package pdftex.def Info: figures/widget_sales_qvalues.png  used on input line 48.
+(pdftex.def)             Requested size: 513.11745pt x 279.1193pt.
+ [5
+
+
+
+ <./figures/widget_sales_qvalues.png>]
+<figures/widget_sales_profits.png, id=134, 433.62pt x 315.0972pt>
+File: figures/widget_sales_profits.png Graphic file (type png)
+<use figures/widget_sales_profits.png>
+Package pdftex.def Info: figures/widget_sales_profits.png  used on input line 83.
+(pdftex.def)             Requested size: 384.83807pt x 279.66153pt.
+) [6 <./figures/widget_sales_profits.png>]
 \openout2 = `problems/code.aux'.
 
- (./problems/code.tex
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 14.
- (../code/obstacle_avoidance.py [4
 
-
-
-] [5] [6])) [7{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./hw4_answers.aux (./problems/p1.aux) (./problems/code.aux))
+No file problems/code.tex.
+(./hw4_answers.aux (./problems/p1.aux) (./problems/p2.aux) (./problems/code.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `hw4_answers.out' has not changed.
-(rerunfilecheck)             Checksum: 5EA9EB59C2C098BD65457C1CF3EB93D2;136.
+(rerunfilecheck)             Checksum: 4A645D90C815DDE79EDC0B1C44101B60;242.
  ) 
 Here is how much of TeX's memory you used:
- 12893 strings out of 469515
- 190656 string characters out of 5470807
- 1225816 words of memory out of 5000000
- 41140 multiletter control sequences out of 15000+600000
- 634510 words of font info for 66 fonts, out of 8000000 for 9000
+ 12737 strings out of 469515
+ 188810 string characters out of 5470807
+ 1113842 words of memory out of 5000000
+ 41129 multiletter control sequences out of 15000+600000
+ 634213 words of font info for 65 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,9n,79p,317b,2114s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on hw4_answers.pdf (7 pages, 484606 bytes).
+ 75i,9n,79p,317b,2164s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on hw4_answers.pdf (6 pages, 594003 bytes).
 PDF statistics:
- 412 PDF objects out of 1000 (max. 8388607)
- 365 compressed objects within 4 object streams
- 248 named destinations out of 1000 (max. 500000)
- 29 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 233 PDF objects out of 1000 (max. 8388607)
+ 187 compressed objects within 2 object streams
+ 105 named destinations out of 1000 (max. 500000)
+ 47 words of extra memory for PDF output out of 10000 (max. 10000000)
 

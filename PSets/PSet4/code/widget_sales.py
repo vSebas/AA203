@@ -68,9 +68,9 @@ log["s"], log["a"], log["r"] = simulate(rng, lambda s, A=A: rng.choice(A), T)
 
 
 # Do Q-learning
-γ = 0.95  # discount factor
-α = 1e-2  # learning rate
-num_epochs = 5 * int(1 / α)  # number of epochs
+gamma = 0.95  # discount factor
+alpha = 1e-2  # learning rate
+num_epochs = 5 * int(1 / alpha)  # number of epochs
 
 Q = np.zeros((S.size, A.size))
 Q_epoch = np.zeros((num_epochs + 1, S.size, A.size))
@@ -82,6 +82,15 @@ for k in tqdm(range(1, num_epochs + 1)):
     # ####################### PART (a): YOUR CODE BELOW #######################
 
     # INSTRUCTIONS: Update `Q` using Q-learning.
+    for idx in shuffled_indices:
+        s = int(log["s"][idx])
+        a = int(log["a"][idx])
+        r = log["r"][idx]
+        s_next = int(log["s"][idx + 1])
+        a_idx = np.where(A == a)[0][0]
+
+        target = r + gamma * np.max(Q[s_next])
+        Q[s, a_idx] += alpha * (target - Q[s, a_idx])
 
     # ############################# END PART (a) ##############################
 
@@ -101,6 +110,15 @@ for k in tqdm(range(max_iters)):
     # ####################### PART (b): YOUR CODE BELOW #######################
 
     # INSTRUCTIONS: Update `Q_vi` using value iteration.
+    Q_new = np.zeros_like(Q_vi)
+    for s in S:
+        for a_idx, a in enumerate(A):
+            expected_value = 0.0
+            for d, p in zip(D, P):
+                s_next = transition(s, a, d)
+                expected_value += p * (reward(s, a, d) + gamma * np.max(Q_vi[s_next]))
+            Q_new[s, a_idx] = expected_value
+    Q_vi = Q_new
 
     # ############################# END PART (b) ##############################
 
@@ -150,11 +168,17 @@ plt.show()
 
 T = 5 * 365
 
-# TODO: replace the next four lines with your code
-a_opt_ql = np.zeros(S.size)
-profit_ql = np.zeros(T)
-a_opt_vi = np.zeros(S.size)
-profit_vi = np.zeros(T)
+a_opt_ql = A[np.argmax(Q, axis=1)]
+a_opt_vi = A[np.argmax(Q_vi, axis=1)]
+
+policy_ql = lambda s: a_opt_ql[int(s)]
+policy_vi = lambda s: a_opt_vi[int(s)]
+
+_, _, r_ql = simulate(np.random.default_rng(seed), policy_ql, T)
+_, _, r_vi = simulate(np.random.default_rng(seed), policy_vi, T)
+
+profit_ql = np.cumsum(r_ql)
+profit_vi = np.cumsum(r_vi)
 
 # ############################### END PART (c) ################################
 
