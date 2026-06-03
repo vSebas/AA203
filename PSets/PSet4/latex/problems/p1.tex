@@ -53,30 +53,17 @@ d(s_{k|t}^{(i)})
 
 
 \subsection*{(d)}
-Each signed distance \(d_j(s)\) is convex, so its first-order Taylor approximation is a global lower bound:
-
-% \[
-% d_j(s) \ge d_j(\bar s)
-% + \nabla d_j(\bar s)^T(s-\bar s)
-% \]
-% The affine approximation can be written as
-% \[
-% A_{d,j}^{(i)}s+c_{d,j}^{(i)}
-% =
-% d_j(\bar s)
-% + \nabla d_j(\bar s)^T(s-\bar s)
-% \]
-% Therefore, if the SCP constraint enforces
-% \[
-% A_{d,j}^{(i)}s+c_{d,j}^{(i)} \ge 0
-% \]
-% then
-% \[
-% d_j(s) \ge A_{d,j}^{(i)}s+c_{d,j}^{(i)} \ge 0
-% \]
-% So satisfying the affine constraint is conservative, but it guarantees the
-% true obstacle constraint.
-
+For each obstacle $j$, convexity of $d_j$ implies
+\[
+d_j(s_{k|t}) \geq d_j(s^{(i)}_{k|t})
++ \nabla d_j(s^{(i)}_{k|t})^\top (s_{k|t}-s^{(i)}_{k|t})
+= [A^{(i)}_{d,k|t}s_{k|t}+c^{(i)}_{d,k|t}]_j .
+\]
+Thus, if the affine approximation satisfies
+\[
+A^{(i)}_{d,k|t}s_{k|t}+c^{(i)}_{d,k|t}\succeq 0,
+\]
+then $d_j(s_{k|t})\geq 0$ for every obstacle $j$. Therefore the linearized obstacle constraint is conservative and still guarantees collision avoidance.
 
 \subsection*{(g)}
 

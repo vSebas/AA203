@@ -1,0 +1,29 @@
+\section{Lunar Lander}
+
+\subsection*{(a)}
+Code uses a Monte Carlo return-to-go estimate of the advantage $\delta_t^\pi = G_t - V_w(x_t)$,
+where \(G_t\) is the discounted return starting at time \(t\). This sits on the
+low-bias, high-variance side of the tradeoff. It avoids bootstrapping from the
+critic, but it depends on sampled episode returns, which can be noisy.
+
+\subsection*{(b)}
+Standardizing the returns keeps the targets on a more reasonable numerical
+scale. Raw returns can vary a lot across episodes, so without standardization
+the actor and critic updates can have gradients that are too large or too small.
+This usually makes training more stable while keeping the same basic learning
+signal.
+
+\subsection*{(c)}
+Using the function in the actor loss makes the advantage act
+like a fixed weight in the policy-gradient update. This is important because the
+actor update should change the policy, not backpropagate through the critic or
+the return estimate. Without stopping the gradient, the actor loss could also
+change the value estimate in a way that is not the intended critic update.
+
+\subsection*{(d)}
+Another option would be a model-based controller. With a known or learned
+dynamics model for the lander, one could solve a trajectory optimization or MPC
+problem with constraints for fuel, thrust limits, and safe landing conditions.
+This would use more assumptions than model-free RL, but it could be more sample
+efficient and easier to make safe. The main drawback is that performance depends
+heavily on the model and cost design being accurate.

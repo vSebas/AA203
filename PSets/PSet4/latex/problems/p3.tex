@@ -97,11 +97,8 @@ Maximum: 11.0
 # 1) Naive REINFORCE
 discounted_return = torch.tensor(
     sum((self.gamma ** t) * rewards[t] for t in range(len(rewards))),
-    dtype=torch.float,
-)
-naive_loss = -torch.stack(
-    [log_prob * discounted_return for log_prob in log_probs]
-).sum()
+    dtype=torch.float,)
+naive_loss = -torch.stack([log_prob * discounted_return for log_prob in log_probs]).sum()
 
 # 2) REINFORCE with causality trick
 returns = []
@@ -110,15 +107,11 @@ for reward in reversed(rewards):
     running_return = reward + self.gamma * running_return
     returns.insert(0, running_return)
 returns = torch.tensor(returns, dtype=torch.float)
-causal_loss = -torch.stack(
-    [log_prob * ret for log_prob, ret in zip(log_probs, returns)]
-).sum()
+causal_loss = -torch.stack([log_prob * ret for log_prob, ret in zip(log_probs, returns)]).sum()
 
 # 3) REINFORCE with causality trick and baseline to "center" the returns
 baseline = returns.mean()
-baseline_loss = -torch.stack(
-    [log_prob * (ret - baseline) for log_prob, ret in zip(log_probs, returns)]
-).sum()
+baseline_loss = -torch.stack([log_prob * (ret - baseline) for log_prob, ret in zip(log_probs, returns)]).sum()
 
 if self.gradient_variant == "naive":
     loss = naive_loss
@@ -147,7 +140,11 @@ Minimum: 86.0
 Maximum: 248.0
 \end{lstlisting}
 
-Compared with the DQN run above, REINFORCE performed much better after training.
-The reward curve is still noisy because policy-gradient updates use sampled
-trajectories directly, but the baseline estimator helps reduce variance by
-centering the returns.
+Compared with the DQN run above, REINFORCE performed better after training.
+The naive estimator was the noisiest, which makes sense because it gives every
+action the same full-trajectory return. That means an action can get credit for
+rewards that happened before it was even taken. The causal estimator fixes this
+by using only the return-to-go after each action. The baseline version then
+centers those returns, which reduced variance and gave the most stable behavior
+in my runs. All three REINFORCE variants were still noisy, but the baseline
+version was the most reliable.

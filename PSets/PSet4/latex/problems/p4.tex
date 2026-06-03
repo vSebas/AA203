@@ -1,0 +1,33 @@
+\section{Learning LQR}
+
+\subsection*{(a)}
+The model-based recursive least-squares method uses the most structure. It
+assumes the dynamics are linear, the cost is quadratic, and that once
+\(A,B,Q,R\) are estimated, the controller can be found by solving the discounted
+DARE. That is a lot to assume, but it also explains why it performs the best in
+the plots: the gain error and cost drop quickly and stay close to optimal.
+
+The model-free policy iteration method uses less information. It does not try to
+identify \(A,B,Q,R\), but it still uses LQR structure by assuming the Q-function
+is quadratic and the policy is linear. Because it uses less structure, it does
+not perform as well as the model-based method, but it still does better than
+direct policy gradient.
+
+The model-free policy-gradient method uses the least problem information. It
+only assumes a linear Gaussian policy and estimates the update from sampled
+rollouts. This makes it more general, but the updates have higher variance, so
+it is slower and less stable.
+
+\subsection*{(b)}
+Prior beliefs about \(A,B,Q,R\) fit most naturally into the model-based method.
+They could be used as regularization terms, Bayesian priors, or just better
+initial guesses for the least-squares estimates.
+
+For model-free policy iteration, those priors are less direct because the method
+learns the Q-function Hessian instead of \(A,B,Q,R\). Still, they could help
+initialize the policy \(K\), choose regularization, or initialize the quadratic
+Q-function estimate.
+
+For policy gradient, the priors are the hardest to use directly. They could help
+pick a better initial policy, tune the exploration covariance, or design a
+baseline, but the algorithm itself never estimates \(A,B,Q,R\).

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1780520444.19124 "/run/media/saveas/Secondary-Storage/Masters/AA203/PSets/PSet4/latex/hw4_answers.tex" "hw4_answers.pdf" "hw4_answers" 1780520446.41854 0
-  "/run/media/saveas/Secondary-Storage/Masters/AA203/PSets/PSet4/latex/hw4_answers.tex" 1780520404.77459 855 5509eae5828c55f3770e66a7103f6b83 ""
+["pdflatex"] 1780526013.97634 "/run/media/saveas/Secondary-Storage/Masters/AA203/PSets/PSet4/latex/hw4_answers.tex" "hw4_answers.pdf" "hw4_answers" 1780526016.15597 0
+  "/run/media/saveas/Secondary-Storage/Masters/AA203/PSets/PSet4/latex/hw4_answers.tex" 1780520791.0957 917 143a8b28528974688f9d414396896608 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1775415801 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1775415801 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1775415801 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -105,15 +105,19 @@
   "figures/soln_obstacle_avoidance_N=5_Nscp=5.png" 1779954828.3237 94938 2d3870baa5d4d4fb308127e64f07a569 ""
   "figures/widget_sales_profits.png" 1780461223.68851 33199 df7823e920572d8f6f3394cce2d2dd53 ""
   "figures/widget_sales_qvalues.png" 1780461223.68538 129068 040a630c04349a6090968f73db87da91 ""
-  "hw4_answers.aux" 1780520446.32242 237 848c1a31d8f0e31622106410189cfdfb "pdflatex"
-  "hw4_answers.out" 1780520446.32617 517 6add116f00ad905f9db493cd8c77a6f2 "pdflatex"
-  "hw4_answers.tex" 1780520404.77459 855 5509eae5828c55f3770e66a7103f6b83 ""
-  "problems/p1.aux" 1780520445.65628 1371 d76a58c52d87871d4bfeadd939c3bea4 "pdflatex"
-  "problems/p1.tex" 1780468118.4823 5372 ef2e86c4f3248104241c2f55d666bee0 ""
-  "problems/p2.aux" 1780520445.98099 1289 db8e4ee7153114348500b111de4b1479 "pdflatex"
+  "hw4_answers.aux" 1780526016.0405 288 64528de183a092700074fe46e6e22e94 "pdflatex"
+  "hw4_answers.out" 1780526016.04677 729 76ecad78a0c8356356d14d13614127ac "pdflatex"
+  "hw4_answers.tex" 1780520791.0957 917 143a8b28528974688f9d414396896608 ""
+  "problems/p1.aux" 1780526015.35681 1371 d76a58c52d87871d4bfeadd939c3bea4 "pdflatex"
+  "problems/p1.tex" 1780522627.74269 5241 846e8122c5ad85d8ca19ed7a416406f0 ""
+  "problems/p2.aux" 1780526015.68003 1289 db8e4ee7153114348500b111de4b1479 "pdflatex"
   "problems/p2.tex" 1780510323.86073 3099 c3c822d9d931025872c6052bf6d9734a ""
-  "problems/p3.aux" 1780520446.32195 1126 5168096cb5020bf39f6d1ded4b536b9f "pdflatex"
-  "problems/p3.tex" 1780520443.66882 5123 1a521ac8876d9457f408c6c8436dd49b ""
+  "problems/p3.aux" 1780526016.02124 1126 fd5476a53377148c1a4231fb17c168f8 "pdflatex"
+  "problems/p3.tex" 1780525670.02 5427 21cdbfe1f775e85cc243ac12f344d71b ""
+  "problems/p4.aux" 1780526016.03036 801 935255c98bdc4ce21425472b95fc8f12 "pdflatex"
+  "problems/p4.tex" 1780523193.43124 1734 20c05cd792325ce38acb5b3f3c18cdf9 ""
+  "problems/p5.aux" 1780526016.03998 801 8f995afe50ca686106e65524c9924fc9 "pdflatex"
+  "problems/p5.tex" 1780526013.72802 1566 388f03cf7288bbb42d5ef2fda046e514 ""
   (generated)
   "hw4_answers.aux"
   "hw4_answers.log"
@@ -122,4 +126,6 @@
   "problems/p1.aux"
   "problems/p2.aux"
   "problems/p3.aux"
+  "problems/p4.aux"
+  "problems/p5.aux"
   (rewritten before read)
